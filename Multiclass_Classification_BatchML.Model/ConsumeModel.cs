@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using Microsoft.ML;
 using Multiclass_Classification_BatchML.Model;
+using System.Runtime;
 
 namespace Multiclass_Classification_BatchML.Model
 {
@@ -15,6 +16,7 @@ namespace Multiclass_Classification_BatchML.Model
         private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
 
         public static string MLNetModelPath = Path.GetFullPath("MLModel.zip");
+        public static string MLNetPredictionsPath = Path.GetFullPath("Predictions.csv");
 
         // For more info on consuming ML.NET models, visit https://aka.ms/mlnet-consume
         // Method for consuming model in your app
@@ -24,11 +26,11 @@ namespace Multiclass_Classification_BatchML.Model
             return result;
         }
 
-        public static List<ModelOutput> PredictBatch(string dataPath)
+        public static string PredictBatch(string dataPath)
         {
             MLContext mlContext = new MLContext();
 
-            // Load model & create prediction engine
+            // Load model
             ITransformer mlModel = mlContext.Model.Load(MLNetModelPath, out var modelInputSchema);
 
             IDataView inputData = mlContext.Data.LoadFromTextFile<ModelInput>(dataPath,
@@ -36,9 +38,14 @@ namespace Multiclass_Classification_BatchML.Model
                                                                             hasHeader: true);
 
             var transformedDataView = mlModel.Transform(inputData);
-            var predictions = mlContext.Data.CreateEnumerable<ModelOutput>(transformedDataView, false).ToList();
-            
-            return predictions;
+
+            string dataPathOutput = Path.GetDirectoryName(dataPath) + @"\predictions.csv";
+            using (FileStream stream = new FileStream(dataPathOutput, FileMode.Create))
+            {
+                mlContext.Data.SaveAsText(transformedDataView, stream);
+            }
+
+            return dataPathOutput;
         }
 
         public static List<ModelOutput> PredictBatch(List<ModelInput> listInput)
@@ -66,6 +73,16 @@ namespace Multiclass_Classification_BatchML.Model
             var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
 
             return predEngine;
+        }
+
+        public static string GetAbsolutePath(string relativePath)
+        {
+            FileInfo _dataRoot = new FileInfo(typeof(ConsumeModel).Assembly.Location);
+            string assemblyFolderPath = _dataRoot.Directory.FullName;
+
+            string fullPath = Path.Combine(assemblyFolderPath, relativePath);
+
+            return fullPath;
         }
     }
 }

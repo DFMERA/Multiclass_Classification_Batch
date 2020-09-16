@@ -13,7 +13,7 @@ namespace Multiclass_Classification_BatchML.ConsoleApp
 {
     public static class ModelBuilder
     {
-        private static string TRAIN_DATA_FILEPATH = @"C:\repos\Multiclass_Classification_Batch\Data\Train\hotel_bookings.csv";
+        private static string TRAIN_DATA_FILEPATH = @"..\..\..\..\Data\Train\hotel_bookings.csv";
         private static string MODEL_FILE = ConsumeModel.MLNetModelPath;
 
         // Create MLContext to be shared across the model creation workflow objects 
