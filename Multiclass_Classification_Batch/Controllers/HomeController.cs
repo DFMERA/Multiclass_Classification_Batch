@@ -34,7 +34,7 @@ namespace Multiclass_Classification_Batch.Controllers
         {
             if (formFile != null && formFile.Length > 0)
             {
-                string pathImgPredict = Path.Combine(pathPrediction, "hotel_bookings_batch.csv");
+                string pathImgPredict = Path.Combine(pathPrediction, ConsumeModel.MLNetBatchFileName);
                 pathImgPredict = ConsumeModel.GetAbsolutePath(pathImgPredict);
                 pathImgPredict = Path.GetFullPath(pathImgPredict);
 

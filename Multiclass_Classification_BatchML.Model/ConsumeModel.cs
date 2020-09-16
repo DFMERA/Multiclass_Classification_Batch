@@ -16,7 +16,8 @@ namespace Multiclass_Classification_BatchML.Model
         private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
 
         public static string MLNetModelPath = @"MLModel.zip";
-       
+        public static string MLNetBatchFileName = @"hotel_bookings_batch.csv";
+
         // For more info on consuming ML.NET models, visit https://aka.ms/mlnet-consume
         // Method for consuming model in your app
         public static ModelOutput Predict(ModelInput input)
@@ -38,10 +39,14 @@ namespace Multiclass_Classification_BatchML.Model
 
             var transformedDataView = mlModel.Transform(inputData);
 
+            var predictions = mlContext.Data.CreateEnumerable<ModelOutput>(transformedDataView, false).ToList();
+
+            IDataView outputView = mlContext.Data.LoadFromEnumerable<ModelOutput>(predictions);
+
             string dataPathOutput = Path.GetDirectoryName(dataPath) + @"\predictions.csv";
             using (FileStream stream = new FileStream(dataPathOutput, FileMode.Create))
             {
-                mlContext.Data.SaveAsText(transformedDataView, stream,
+                mlContext.Data.SaveAsText(outputView, stream,
                                                         separatorChar: ',',
                                                         headerRow: true, schema: false);
             }
