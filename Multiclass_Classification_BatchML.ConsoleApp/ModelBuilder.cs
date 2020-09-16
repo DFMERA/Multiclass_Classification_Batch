@@ -23,6 +23,7 @@ namespace Multiclass_Classification_BatchML.ConsoleApp
         public static void CreateModel()
         {
             // Load Data
+            string trainFullPath = GetAbsolutePath(TRAIN_DATA_FILEPATH);
             IDataView trainingDataView = mlContext.Data.LoadFromTextFile<ModelInput>(
                                             path: TRAIN_DATA_FILEPATH,
                                             hasHeader: true,

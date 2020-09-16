@@ -71,10 +71,11 @@ namespace Multiclass_Classification_BatchML.ConsoleApp
             Console.WriteLine($"Total_of_special_requests: {sampleData.Total_of_special_requests}");
             Console.WriteLine($"\n\nPredicted Reservation_status value {predictionResult.Prediction} \nPredicted Reservation_status scores: [{String.Join(",", predictionResult.Score)}]\n\n");
 
-            var predictionResultBatch = ConsumeModel.PredictBatch(@"C:\repos\Multiclass_Classification_Batch\Data\Predict\hotel_bookings_batch.csv");
+            var predictionResultBatch = ConsumeModel.PredictBatch(@"..\..\..\..\Data\Predict\hotel_bookings_batch.csv");
 
             Console.WriteLine("Using model to make batch prediction -- Comparing actual Reservation_status with predicted Reservation_status from sample data...\n\n");
-            Console.WriteLine($"\n\nPredicted Reservation_status value {predictionResultBatch.First().Prediction} \nPredicted Reservation_status scores: [{String.Join(",", predictionResult.Score)}]\n\n");
+            //Console.WriteLine($"\n\nPredicted Reservation_status value {predictionResultBatch.First().Prediction} \nPredicted Reservation_status scores: [{String.Join(",", predictionResult.Score)}]\n\n");
+            Console.WriteLine($"\n\nPredicted File {predictionResultBatch} \n");
 
             Console.WriteLine("=============== End of process, hit any key to finish ===============");
             Console.ReadKey();

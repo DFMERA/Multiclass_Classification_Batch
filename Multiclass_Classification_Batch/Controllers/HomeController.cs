@@ -17,7 +17,7 @@ namespace Multiclass_Classification_Batch.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private string pathPrediction = @"..\..\..\..\..\Data\Predict\";
+        private string pathPrediction = @"..\..\..\..\Data\Predict\";
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -34,7 +34,8 @@ namespace Multiclass_Classification_Batch.Controllers
         {
             if (formFile != null && formFile.Length > 0)
             {
-                string pathImgPredict = Path.Combine(pathPrediction, formFile.FileName);
+                string pathImgPredict = Path.Combine(pathPrediction, "hotel_bookings_batch.csv");
+                pathImgPredict = ConsumeModel.GetAbsolutePath(pathImgPredict);
                 pathImgPredict = Path.GetFullPath(pathImgPredict);
 
                 using (var stream = System.IO.File.Create(pathImgPredict))

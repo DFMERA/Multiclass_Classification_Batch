@@ -15,9 +15,8 @@ namespace Multiclass_Classification_BatchML.Model
     {
         private static Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictionEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(CreatePredictionEngine);
 
-        public static string MLNetModelPath = Path.GetFullPath("MLModel.zip");
-        public static string MLNetPredictionsPath = Path.GetFullPath("Predictions.csv");
-
+        public static string MLNetModelPath = @"MLModel.zip";
+       
         // For more info on consuming ML.NET models, visit https://aka.ms/mlnet-consume
         // Method for consuming model in your app
         public static ModelOutput Predict(ModelInput input)
@@ -31,7 +30,7 @@ namespace Multiclass_Classification_BatchML.Model
             MLContext mlContext = new MLContext();
 
             // Load model
-            ITransformer mlModel = mlContext.Model.Load(MLNetModelPath, out var modelInputSchema);
+            ITransformer mlModel = mlContext.Model.Load(GetAbsolutePath(MLNetModelPath), out var modelInputSchema);
 
             IDataView inputData = mlContext.Data.LoadFromTextFile<ModelInput>(dataPath,
                                                                             separatorChar: ',',
@@ -42,7 +41,9 @@ namespace Multiclass_Classification_BatchML.Model
             string dataPathOutput = Path.GetDirectoryName(dataPath) + @"\predictions.csv";
             using (FileStream stream = new FileStream(dataPathOutput, FileMode.Create))
             {
-                mlContext.Data.SaveAsText(transformedDataView, stream);
+                mlContext.Data.SaveAsText(transformedDataView, stream,
+                                                        separatorChar: ',',
+                                                        headerRow: true, schema: false);
             }
 
             return dataPathOutput;
@@ -53,7 +54,7 @@ namespace Multiclass_Classification_BatchML.Model
             MLContext mlContext = new MLContext();
 
             // Load model & create prediction engine
-            ITransformer mlModel = mlContext.Model.Load(MLNetModelPath, out var modelInputSchema);
+            ITransformer mlModel = mlContext.Model.Load(GetAbsolutePath(MLNetModelPath), out var modelInputSchema);
 
             IDataView inputData = mlContext.Data.LoadFromEnumerable<ModelInput>(listInput, modelInputSchema);
                                                                             
@@ -69,7 +70,7 @@ namespace Multiclass_Classification_BatchML.Model
             MLContext mlContext = new MLContext();
 
             // Load model & create prediction engine
-            ITransformer mlModel = mlContext.Model.Load(MLNetModelPath, out var modelInputSchema);
+            ITransformer mlModel = mlContext.Model.Load(GetAbsolutePath(MLNetModelPath), out var modelInputSchema);
             var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
 
             return predEngine;
