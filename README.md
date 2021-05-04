@@ -11,3 +11,8 @@ The ML.NET framework is very useful for creating end-to-end Machine Learning app
 that is, from the training of a model with historical data to the inference or prediction of a result with new data.
 When we create an application using ML.NET Model Builder
 We can make predictions of one outcome or one prediction at a time, but there are times when we need to make many predictions at once in batch form. In this post we will do an exercise to create an application that predicts the cancellation of a hotel reservation and we will modify the code to make batch predictions from several records in a .csv file.
+
+## Artículos relacionados
+[Científico de datos vs ingeniero de datos (y cuál debería elegir)](https://acelera.tech/2021/05/02/cientifico-de-datos-vs-ingeniero-de-datos-y-cual-deberia-elegir/)
+
+[Machine Learning | Predecir el valor de una acción usando series de tiempo](https://acelera.tech/2020/11/26/machine-learning-predecir-el-valor-de-una-accion-usando-series-de-tiempo/)
